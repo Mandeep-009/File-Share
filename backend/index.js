@@ -1,10 +1,84 @@
 import express from 'express'
 import mongoose from 'mongoose'
 import cors from 'cors'
-import { MONGODB_URL } from './config'
+import { MONGODB_URL } from './config.js'
+import Files from './models/Files.js'
+import upload from './multer-middleware.js'
+import { uploadOnCloudinary } from './cloudinary.js'
+import pLimit from 'p-limit'
 
 const app = express()
 app.use(cors())
+app.use(express.json())
+
+app.get('/',(req,res)=>{
+    try {
+        res.status(200).send('I am running')
+    } catch (error) {
+        console.log(error)
+        res.status(400).send({message: error.message})
+    }
+})
+
+app.get('/:code',async(req,res)=>{
+    try {
+        const id = req.params.code;
+        const result = await Files.findById(id)
+        if(result){
+            return res.status(200).send(result)
+        }
+        else{
+            return res.status(404).send('No connection found by this id')
+        }
+    } catch (error) {
+        console.log(error)
+        res.status(400).send({message: error.message})
+    }
+})
+
+app.post('/new-connection', async(req,res)=>{
+    try {
+        const _id = req.body.id;
+        const obj = {_id};
+        await Files.create(obj)
+        res.status(201).send('channel created successfully')
+    } catch (error) {
+        console.log(error)
+        res.status(400).send({message: error.message})
+    }
+})
+
+app.patch('/add-files', upload.array("files",10), async(req,res)=>{
+    try {
+        const id = req.body.id;
+        const fileUploadResponses = req.files?.map(file => ({
+            url: file.path,
+            public_id: file.filename,
+          }));
+        const limit = pLimit(10);
+
+        const imagesToUpload = fileUploadResponses.map((file) => {
+            return limit(async ()=>{
+                const url = await uploadOnCloudinary(file.url)
+                const result = {url,name: file.public_id.slice(5)}
+                return result;
+            })
+        })
+        let uploads = await Promise.all(imagesToUpload);
+
+        const response = await Files.findByIdAndUpdate(id,{content: uploads})
+        if(!response){
+            return res.status(404).send({message: 'no channel exist by this id'})
+        }
+
+
+        res.status(201).send(uploads);
+        
+    } catch (error) {
+        console.log(error)
+        res.status(400).send({message: error.message})
+    }
+})
 
 mongoose.connect(MONGODB_URL)
     .then(()=>{
@@ -12,4 +86,7 @@ mongoose.connect(MONGODB_URL)
         app.listen(5173,()=>{
             console.log('server is listening on port 5173')
         })
+    })
+    .catch((err)=>{
+        console.log('an error occured: ', err)
     })
