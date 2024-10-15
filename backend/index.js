@@ -1,14 +1,17 @@
 import express from 'express'
 import mongoose from 'mongoose'
 import cors from 'cors'
-import { MONGODB_URL } from './config.js'
+import { MONGODB_URL , PORT } from './config.js'
 import Files from './models/Files.js'
 import upload from './multer-middleware.js'
 import { uploadOnCloudinary } from './cloudinary.js'
 import pLimit from 'p-limit'
 
 const app = express()
-app.use(cors())
+app.use(cors({
+    origin: ["https://text-share-app.vercel.app"],
+    methods: ["POST" , "GET" , "PATCH" , "DELETE" ]
+}))
 app.use(express.json())
 
 app.get('/',(req,res)=>{
@@ -28,7 +31,7 @@ app.get('/:code',async(req,res)=>{
             return res.status(200).send(result)
         }
         else{
-            return res.status(404).send('No connection found by this id')
+            return res.status(404).send('No channel found by this id')
         }
     } catch (error) {
         console.log(error)
@@ -83,8 +86,8 @@ app.patch('/add-files', upload.array("files",10), async(req,res)=>{
 mongoose.connect(MONGODB_URL)
     .then(()=>{
         console.log('connected to database')
-        app.listen(5173,()=>{
-            console.log('server is listening on port 5173')
+        app.listen(PORT,()=>{
+            console.log(`server is listening on port ${PORT}`)
         })
     })
     .catch((err)=>{

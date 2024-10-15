@@ -4,7 +4,7 @@ if(process.env.NODE_ENV!=='production'){
     configDotenv();
 }
 
-export const PORT = 5173
+export const PORT = process.env.PORT;
 export const MONGODB_URL = process.env.MONGODB_URL;
 export const CLOUD_NAME = process.env.CLOUD_NAME;
 export const API_KEY = process.env.API_KEY;
