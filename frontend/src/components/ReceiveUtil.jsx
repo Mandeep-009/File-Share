@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { backendURL } from '../config';
 import axios from 'axios';
-import RenderFile from './RenderFile';
 import { useNavigate } from 'react-router-dom';
 
 const ReceiveUtil = (props) => {
@@ -83,7 +82,7 @@ const ReceiveUtil = (props) => {
                                 <div key={index}>
                                     {/* <img src={file.url} height={150} width={150} alt='pic' /> */}
                                     {/* <RenderFile url={file.url} /> */}
-                                    {isPdf?(<iframe src={file.url} height={150} width={150} />):(<img src={file.url} height={150} width={150} alt='pic' />)}
+                                    {isPdf?(<iframe title={index} src={file.url} height={150} width={150} />):(<img src={file.url} height={150} width={150} alt='pic' />)}
                                     <div>{file.name}</div>
                                     <button type='button' onClick={handleDownload}>Download</button>
                                 </div>

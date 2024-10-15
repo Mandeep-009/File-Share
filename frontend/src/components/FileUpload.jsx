@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import axios from 'axios';
-import RenderFile from './RenderFile.jsx';
 import { useNavigate } from 'react-router-dom';
 import { backendURL } from '../config.js';
 
@@ -99,7 +98,7 @@ const FileUpload = (props) => {
             if(file.url.slice(-3)==="pdf") isPdf = true;
             return (
                 <div key={index} style={{display: 'flex', justifyContent: 'center', flexDirection: 'column'}}>
-                    <div>{isPdf?(<iframe src={file.url} height={150} width={150} />):(<img src={file.url} height={150} width={150} alt='pic' />)}</div>
+                    <div>{isPdf?(<iframe title={index} src={file.url} height={150} width={150} />):(<img src={file.url} height={150} width={150} alt='pic' />)}</div>
                     <div>{file.name}</div>
                 </div>
             )
