@@ -9,7 +9,7 @@ import pLimit from 'p-limit'
 
 const app = express()
 app.use(cors({
-    origin: ["https://text-share-app.vercel.app"],
+    origin: ["https://filecross.vercel.app"],
     methods: ["POST" , "GET" , "PATCH" , "DELETE" ]
 }))
 app.use(express.json())
