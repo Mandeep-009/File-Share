@@ -60,6 +60,7 @@ app.patch('/add-files', upload.array("files",10), async(req,res)=>{
           }));
         const limit = pLimit(10);
         console.log(fileUploadResponses)
+        res.send(fileUploadResponses);
 
         const imagesToUpload = fileUploadResponses.map((file) => {
             return limit(async ()=>{
