@@ -59,10 +59,12 @@ app.patch('/add-files', upload.array("files",10), async(req,res)=>{
             public_id: file.filename,
           }));
         const limit = pLimit(10);
+        console.log(fileUploadResponses)
 
         const imagesToUpload = fileUploadResponses.map((file) => {
             return limit(async ()=>{
                 const url = await uploadOnCloudinary(file.url)
+                console.log(url);
                 const result = {url,name: file.public_id.slice(5)}
                 return result;
             })
