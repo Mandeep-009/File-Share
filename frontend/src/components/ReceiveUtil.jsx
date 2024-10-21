@@ -29,9 +29,14 @@ const ReceiveUtil = (props) => {
     const multipleDownloadHandler = async () => {
         try {
             const downloadPromises = content.map(async (file) => {
-                const response = await fetch(file.url);
+                let fileUrl = file.url;
+                const firstFiveChars = fileUrl.substring(0, 5);
+                if(firstFiveChars !== 'https'){
+                fileUrl = "https" + fileUrl.substring(4);
+                }
+                const response = await fetch(fileUrl);
                 if (!response.ok) {
-                    throw new Error(`Failed to fetch ${file.url}: ${response.statusText}`);
+                    throw new Error(`Failed to fetch ${fileUrl}: ${response.statusText}`);
                 }
                 const blob = await response.blob();
                 const link = document.createElement('a');
@@ -70,9 +75,14 @@ const ReceiveUtil = (props) => {
                         content.map((file,index)=>{
                             let isPdf = false;
                             if(file.url.slice(-3)==="pdf") isPdf = true;
+                            let fileUrl = file.url;
+                            const firstFiveChars = fileUrl.substring(0, 5);
+                            if(firstFiveChars !== 'https'){
+                                fileUrl = "https" + fileUrl.substring(4);
+                            }
                             const handleDownload = async(e) => {
                                 e.preventDefault();
-                                const response = await fetch(file.url);
+                                const response = await fetch(fileUrl);
                                 const blob = await response.blob();
                                 const link = document.createElement('a');
                                 link.href = URL.createObjectURL(blob);
@@ -83,7 +93,7 @@ const ReceiveUtil = (props) => {
                                 <div key={index}>
                                     {/* <img src={file.url} height={150} width={150} alt='pic' /> */}
                                     {/* <RenderFile url={file.url} /> */}
-                                    {isPdf?(<iframe title={index} src={file.url} height={150} width={150} />):(<img src={file.url} height={150} width={150} alt='pic' />)}
+                                    {isPdf?(<iframe title={index} src={fileUrl} height={150} width={150} />):(<img src={fileUrl} height={150} width={150} alt='pic' />)}
                                     <div>{file.name}</div>
                                     <button type='button' onClick={handleDownload}>Download</button>
                                 </div>

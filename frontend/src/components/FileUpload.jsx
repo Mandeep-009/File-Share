@@ -97,9 +97,14 @@ const FileUpload = (props) => {
           files.map((file,index)=>{
             let isPdf = false;
             if(file.url.slice(-3)==="pdf") isPdf = true;
+            let fileUrl = file.url;
+            const firstFiveChars = fileUrl.substring(0, 5);
+            if(firstFiveChars !== 'https'){
+              fileUrl = "https" + fileUrl.substring(4);
+            }
             return (
                 <div key={index} style={{display: 'flex', justifyContent: 'center', flexDirection: 'column'}}>
-                    <div>{isPdf?(<iframe title={index} src={file.url} height={150} width={150} />):(<img src={file.url} height={150} width={150} alt='pic' />)}</div>
+                    <div>{isPdf?(<iframe title={index} src={fileUrl} height={150} width={150} />):(<img src={fileUrl} height={150} width={150} alt='pic' />)}</div>
                     <div>{file.name}</div>
                 </div>
             )
