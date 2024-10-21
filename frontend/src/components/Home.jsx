@@ -7,12 +7,12 @@ const Home = () => {
         <h2>File Share App</h2>
         <div>
             <Link to={'/send'}>
-                <button>Send Files</button>
+                <button style={{margin: '5px'}}>Send Files</button>
             </Link>
         </div>
         <div>
             <Link to={'/receive'}>
-                <button>Receive Files</button>
+                <button style={{margin: '5px'}}>Receive Files</button>
             </Link>
         </div>
         <div>*Currently only for pdf and images</div>

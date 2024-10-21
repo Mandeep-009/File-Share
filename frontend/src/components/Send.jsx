@@ -33,7 +33,10 @@ const Send = () => {
     <div>
       {
         loading? (
-          <div>Generating new token...</div>
+          <div>
+            <div>Generating new token...</div>
+            <div>Sometimes it may take some time to restart the server. Please refresh if it is taking more than 30 seconds</div>
+          </div>
         ) : (
           <SendUtil id={id} content={[]}/>
         )
