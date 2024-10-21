@@ -4,6 +4,7 @@ import { backendURL } from '../config';
 import SendUtil from './SendUtil';
 
 const Send = () => {
+  axios.defaults.withCredentials = true;
   const [loading,setLoading] = useState(true);
   const [id,setId] = useState('');
   useEffect(()=>{

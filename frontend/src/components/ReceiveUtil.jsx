@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const ReceiveUtil = (props) => {
+    axios.defaults.withCredentials = true;
     const id = props.id;
     const [content,setContent] = useState(props.content)
     const navigate = useNavigate();

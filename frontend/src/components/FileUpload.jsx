@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { backendURL } from '../config.js';
 
 const FileUpload = (props) => {
+    axios.defaults.withCredentials = true;
     const [files,setFiles] = useState([])
     const [done,setDone] = useState(true);
     const id = props.id;

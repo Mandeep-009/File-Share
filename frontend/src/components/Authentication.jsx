@@ -4,6 +4,7 @@ import {backendURL} from '../config';
 
 const Authentication = ({authenticated}) => {
   const [code,setCode] = useState('');
+  axios.defaults.withCredentials = true;
   async function checkCode () {
     
     try {

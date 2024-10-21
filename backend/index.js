@@ -10,7 +10,8 @@ import pLimit from 'p-limit'
 const app = express()
 app.use(cors({
     origin: ["https://filecross.vercel.app","http://localhost:3000"],
-    methods: ["POST" , "GET" , "PATCH" , "DELETE" ]
+    methods: ["POST" , "GET" , "PATCH" ],
+    credentials: true
 }))
 app.use(express.json())
 
