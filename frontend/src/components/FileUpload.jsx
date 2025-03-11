@@ -71,46 +71,133 @@ const FileUpload = (props) => {
   });
 
   return (
-    <div>
+    <div className='upload-wrapper'>
       <div
         {...getRootProps({ className: 'dropzone' })}
-        style={{
-          border: '2px dashed #007bff',
-          borderRadius: '4px',
-          height: '60vh',
-          alignContent: 'center',
-          textAlign: 'center',
-          cursor: 'pointer',
-          backgroundColor: isDragActive ? '#e7f1ff' : '#fff',
-        }}
+        className='drop-area'
       >
         <input {...getInputProps()} />
         {isDragActive ? (
-          <p>Drop the files here...</p>
+          <div className='drop-message'>
+            <i className="fas fa-cloud-upload-alt"></i>
+            <p>Drop the files here...</p>
+          </div>
         ) : (
-          <p>Drag 'n' drop some files here, or click to select files</p>
+          <div className='drop-message'>
+            <i className="fas fa-cloud-upload-alt"></i>
+            <p>Drag 'n' drop files here, or click to select</p>
+            <span className='file-limit'>Maximum 10 files allowed</span>
+          </div>
         )}
       </div>
-      <br />
-      <div style={{display: 'flex', gap: '20px'}}>
-        {done?(
-          files.map((file,index)=>{
-            let isPdf = false;
-            if(file.url.slice(-3)==="pdf") isPdf = true;
-            let fileUrl = file.url;
-            const firstFiveChars = fileUrl.substring(0, 5);
-            if(firstFiveChars !== 'https'){
-              fileUrl = "https" + fileUrl.substring(4);
-            }
+
+      <div className='files-preview'>
+        {done ? (
+          files.map((file, index) => {
+            let isPdf = file.url.slice(-3) === "pdf";
+            let fileUrl = file.url.startsWith('https') ? file.url : "https" + file.url.substring(4);
             return (
-                <div key={index} style={{display: 'flex', justifyContent: 'center', flexDirection: 'column'}}>
-                    <div>{isPdf?(<iframe title={index} src={fileUrl} height={150} width={150} />):(<img src={fileUrl} height={150} width={150} alt='pic' />)}</div>
-                    <div>{file.name}</div>
+              <div key={index} className='file-item'>
+                <div className='file-preview'>
+                  {isPdf ? (
+                    <iframe title={index} src={fileUrl} height={150} width={150} />
+                  ) : (
+                    <img src={fileUrl} height={150} width={150} alt='preview' />
+                  )}
                 </div>
+                <div className='file-name'>{file.name}</div>
+              </div>
             )
-        })
-        ): 'sending....'}
+          })
+        ) : (
+          <div className='loading'>
+            <div className='spinner'></div>
+            <p>Uploading...</p>
+          </div>
+        )}
       </div>
+
+      <style jsx>{`
+        .upload-wrapper {
+          width: 100%;
+          height: 100%;
+        }
+
+        .drop-area {
+          border: 2px dashed #667eea;
+          border-radius: 10px;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background-color: ${isDragActive ? '#f0f4ff' : '#fff'};
+          transition: all 0.3s ease;
+        }
+
+        .drop-message {
+          text-align: center;
+          color: #2c3e50;
+        }
+
+        .drop-message i {
+          font-size: 3rem;
+          color: #667eea;
+          margin-bottom: 1rem;
+        }
+
+        .file-limit {
+          display: block;
+          font-size: 0.9rem;
+          color: #666;
+          margin-top: 0.5rem;
+        }
+
+        .files-preview {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 1rem;
+          margin-top: 1rem;
+        }
+
+        .file-item {
+          background: white;
+          border-radius: 8px;
+          padding: 0.5rem;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .file-preview {
+          border-radius: 4px;
+          overflow: hidden;
+        }
+
+        .file-name {
+          margin-top: 0.5rem;
+          font-size: 0.9rem;
+          color: #2c3e50;
+        }
+
+        .loading {
+          width: 100%;
+          text-align: center;
+          color: #2c3e50;
+        }
+
+        .spinner {
+          border: 3px solid #f3f3f3;
+          border-top: 3px solid #667eea;
+          border-radius: 50%;
+          width: 30px;
+          height: 30px;
+          animation: spin 1s linear infinite;
+          margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      `}</style>
     </div>
   );
 };
