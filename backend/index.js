@@ -9,7 +9,7 @@ import pLimit from 'p-limit'
 
 const app = express()
 app.use(cors({
-    origin: ["https://filecross.vercel.app","http://localhost:3000"],
+    origin: ["https://filecross.vercel.app","https://fileshare.mandeep.space"],
     methods: ["POST" , "GET" , "PATCH" ],
     credentials: true
 }))
