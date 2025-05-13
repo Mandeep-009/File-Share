@@ -8,7 +8,14 @@ const Authentication = ({authenticated}) => {
   async function checkCode () {
     
     try {
-      const result = await axios.get(`${backendURL}/${code}`);
+      const result = await axios.post(`${backendURL}/get-files`,{
+        id: code,
+        userAgent: navigator.userAgent,
+        platform: navigator?.userAgentData?.platform || "unknown",
+        screenWidth: window.screen.width,
+        screenHeight: window.screen.height,
+        isTouchDevice: 'ontouchstart' in window || navigator.maxTouchPoints > 0
+      });
       if(result.data){
         authenticated(result.data._id,result.data.content);
       } else {

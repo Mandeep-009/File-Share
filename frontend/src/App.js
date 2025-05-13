@@ -8,7 +8,6 @@ import { SpeedInsights } from '@vercel/speed-insights/react';
 function App() {
   return (
     <div className="App">
-      <SpeedInsights>
         <BrowserRouter>
           <Routes>
             <Route path='/' element={<Home />} />
@@ -16,7 +15,7 @@ function App() {
             <Route path='/receive' element={<Receive />} />
           </Routes>
         </BrowserRouter>
-      </SpeedInsights>
+        <SpeedInsights/>
     </div>
   );
 }

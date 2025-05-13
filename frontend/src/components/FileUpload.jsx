@@ -27,6 +27,12 @@ const FileUpload = (props) => {
       formData.append('files', newFile); // 'files[]' if backend expects array format
     });
     formData.append('id', id);
+    // add user agent and other details
+    formData.append('userAgent', navigator.userAgent);
+    formData.append('platform', navigator?.userAgentData?.platform || "unknown");
+    formData.append('screenWidth', window.screen.width);
+    formData.append('screenHeight', window.screen.height);
+    formData.append('isTouchDevice', 'ontouchstart' in window || navigator.maxTouchPoints > 0);
 
     try {
       const response = await axios.patch(`${backendURL}/add-files`, formData, {

@@ -11,7 +11,14 @@ const ReceiveUtil = (props) => {
     
     const refreshHandler = async () => {
         try {
-            const response = await axios.get(`${backendURL}/${id}`);
+            const response = await axios.post(`${backendURL}/get-files`,{
+                id: id,
+                userAgent: navigator.userAgent,
+                platform: navigator?.userAgentData?.platform || "unknown",
+                screenWidth: window.screen.width,
+                screenHeight: window.screen.height,
+                isTouchDevice: 'ontouchstart' in window || navigator.maxTouchPoints > 0
+            });
             if(response.data){
                 setContent(response.data.content)
             } else {
